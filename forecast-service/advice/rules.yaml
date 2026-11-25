@@ -1,0 +1,93 @@
+# Advice rules: (AQI category x health profile x trend) -> action codes.
+# The LLM never decides WHAT to recommend; it only rewords the sentences chosen here.
+# VERIFY every rule and sentence against current public health guidance (e.g. CPCB AQI
+# health statements, national advisories). Keep it conservative; no medication, no dosing.
+
+sensitive_profiles: [ASTHMA, CHILD, ELDERLY]
+
+# Every matching rule contributes its actions (union). "SENSITIVE" expands to sensitive_profiles.
+rules:
+  - categories: [GOOD]
+    actions: [NO_SPECIAL_PRECAUTIONS]
+  - categories: [SATISFACTORY]
+    profiles: [GENERAL, EXERCISER]
+    actions: [NO_SPECIAL_PRECAUTIONS]
+  - categories: [SATISFACTORY]
+    profiles: [SENSITIVE]
+    actions: [REDUCE_PROLONGED_EXERTION]
+  - categories: [MODERATE]
+    profiles: [GENERAL]
+    actions: [CHECK_AGAIN_LATER]
+  - categories: [MODERATE]
+    profiles: [SENSITIVE, EXERCISER]
+    actions: [REDUCE_PROLONGED_EXERTION]
+  - categories: [MODERATE, POOR, VERY_POOR, SEVERE]
+    profiles: [ASTHMA]
+    actions: [FOLLOW_CARE_PLAN]
+  - categories: [POOR]
+    actions: [LIMIT_TIME_OUTDOORS, KEEP_WINDOWS_CLOSED]
+  - categories: [POOR]
+    profiles: [SENSITIVE, EXERCISER]
+    actions: [AVOID_OUTDOOR_EXERCISE]
+  - categories: [VERY_POOR]
+    actions: [AVOID_OUTDOOR_EXERCISE, WEAR_N95, KEEP_WINDOWS_CLOSED]
+  - categories: [VERY_POOR]
+    profiles: [SENSITIVE]
+    actions: [STAY_INDOORS]
+  - categories: [SEVERE]
+    actions: [STAY_INDOORS, AVOID_OUTDOOR_EXERCISE, WEAR_N95, KEEP_WINDOWS_CLOSED]
+  - categories: [MODERATE, POOR, VERY_POOR, SEVERE]
+    trends: [WORSENING]
+    actions: [PLAN_AROUND_WORST_HOURS]
+  - categories: [POOR, VERY_POOR, SEVERE]
+    trends: [IMPROVING]
+    actions: [CHECK_AGAIN_LATER]
+
+# Output order (most important first).
+priority:
+  - STAY_INDOORS
+  - AVOID_OUTDOOR_EXERCISE
+  - WEAR_N95
+  - LIMIT_TIME_OUTDOORS
+  - REDUCE_PROLONGED_EXERTION
+  - KEEP_WINDOWS_CLOSED
+  - PLAN_AROUND_WORST_HOURS
+  - FOLLOW_CARE_PLAN
+  - CHECK_AGAIN_LATER
+  - NO_SPECIAL_PRECAUTIONS
+
+templates:
+  NO_SPECIAL_PRECAUTIONS:
+    en: "Air quality is fine for your usual outdoor activities."
+    hi: "आपकी सामान्य बाहरी गतिविधियों के लिए हवा ठीक है।"
+  REDUCE_PROLONGED_EXERTION:
+    en: "Cut down on long or intense outdoor activity."
+    hi: "लंबी या भारी बाहरी गतिविधि कम करें।"
+  AVOID_OUTDOOR_EXERCISE:
+    en: "Avoid outdoor exercise; move workouts indoors."
+    hi: "बाहर व्यायाम न करें; व्यायाम घर के अंदर करें।"
+  LIMIT_TIME_OUTDOORS:
+    en: "Limit the time you spend outdoors."
+    hi: "बाहर कम से कम समय बिताएँ।"
+  STAY_INDOORS:
+    en: "Stay indoors as much as you can."
+    hi: "जितना हो सके घर के अंदर रहें।"
+  WEAR_N95:
+    en: "If you must go out, wear a well-fitted N95 mask."
+    hi: "बाहर जाना ज़रूरी हो तो ठीक से फिट N95 मास्क पहनें।"
+  KEEP_WINDOWS_CLOSED:
+    en: "Keep windows closed during the worst hours."
+    hi: "सबसे खराब घंटों में खिड़कियाँ बंद रखें।"
+  PLAN_AROUND_WORST_HOURS:
+    en: "Air is expected to get worse; plan errands before the worst hours."
+    hi: "हवा और खराब होने की संभावना है; ज़रूरी काम सबसे खराब समय से पहले निपटा लें।"
+  FOLLOW_CARE_PLAN:
+    en: "If your doctor has given you a care plan, keep it handy."
+    hi: "अगर डॉक्टर ने कोई देखभाल योजना दी है, तो उसे अपने पास रखें।"
+  CHECK_AGAIN_LATER:
+    en: "Check again later, as conditions can change."
+    hi: "बाद में फिर से जाँचें, स्थिति बदल सकती है।"
+
+disclaimer:
+  en: "General guidance only, not medical advice."
+  hi: "यह केवल सामान्य जानकारी है, चिकित्सा सलाह नहीं।"

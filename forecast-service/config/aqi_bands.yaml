@@ -1,0 +1,9 @@
+# Must match backend/src/main/resources/aqi.yml (VERIFY against the CPCB National AQI standard).
+# Used for category accuracy, confusion matrices and alert replay.
+bands:
+  - {category: GOOD,         min: 0,   max: 50}
+  - {category: SATISFACTORY, min: 51,  max: 100}
+  - {category: MODERATE,     min: 101, max: 200}
+  - {category: POOR,         min: 201, max: 300}
+  - {category: VERY_POOR,    min: 301, max: 400}
+  - {category: SEVERE,       min: 401, max: 500}

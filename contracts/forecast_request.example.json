@@ -1,0 +1,9 @@
+{
+  "station_id": "ito-delhi-cpcb",
+  "horizon_hours": 24,
+  "readings": [
+    {"ts": "2026-11-20T02:30:00Z", "aqi": 165},
+    {"ts": "2026-11-20T03:30:00Z", "aqi": 172},
+    {"ts": "2026-11-20T04:30:00Z", "aqi": 180}
+  ]
+}

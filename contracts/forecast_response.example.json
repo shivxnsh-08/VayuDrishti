@@ -1,0 +1,11 @@
+{
+  "station_id": "ito-delhi-cpcb",
+  "generated_at": "2026-11-20T04:35:00Z",
+  "origin_ts": "2026-11-20T04:30:00Z",
+  "model_version": "lgbm-20261115T000000",
+  "method": "MODEL",
+  "predictions": [
+    {"target_ts": "2026-11-20T05:30:00Z", "predicted_aqi": 184, "lower": 160, "upper": 210},
+    {"target_ts": "2026-11-20T06:30:00Z", "predicted_aqi": 190, "lower": 158, "upper": 225}
+  ]
+}

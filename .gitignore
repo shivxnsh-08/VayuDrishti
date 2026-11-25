@@ -1,0 +1,47 @@
+# Secrets
+.env
+.env.*
+!.env.example
+*.env.local
+*.pem
+*.key
+
+# Database dumps and backups
+*.dump
+*.bak
+*.backup
+*.sql.gz
+
+# Java
+backend/target/
+*.class
+*.log
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+.mypy_cache/
+
+# Node, logs, coverage
+/node_modules/
+logs/
+coverage/
+
+# Model artifacts (trained locally; keep the folder)
+forecast-service/models/artifacts/*
+!forecast-service/models/artifacts/.gitkeep
+
+# Data exports
+*.csv
+!evaluation/results/**/*.csv
+
+# IDE / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db

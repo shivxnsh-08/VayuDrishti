@@ -1,0 +1,460 @@
+{
+ "index_name": "3b01bcb8-0b14-4abf-b6f2-c1bfd384ba69",
+ "title": "Real time Air Quality Index from various locations",
+ "desc": "Real time Air Quality Index from various locations",
+ "org_type": "Central",
+ "org": [
+  "Ministry of Environment, Forest and Climate Change",
+  "Central Pollution Control Board"
+ ],
+ "sector": [
+  "Environment and Forest",
+  "Industrial Air Pollution",
+  "Residential Air Pollution",
+  "Vehicular Air Pollution"
+ ],
+ "source": "data.gov.in",
+ "catalog_uuid": "a3e7afc6-b799-4ede-b143-8e074b27e062",
+ "visualizable": "1",
+ "active": "1",
+ "created": 1470249000,
+ "updated": 1795352575,
+ "created_date": "2016-04-08T00:00:00Z",
+ "updated_date": "2026-11-22T13:02:55Z",
+ "external_ws": 0,
+ "external_ws_url": "",
+ "target_bucket": {
+  "index": "air_quality",
+  "type": "3b01bcb8-0b14-4abf-b6f2-c1bfd384ba69"
+ },
+ "field": [
+  {
+   "name": "country",
+   "id": "country",
+   "type": "keyword"
+  },
+  {
+   "name": "state",
+   "id": "state",
+   "type": "keyword"
+  },
+  {
+   "name": "city",
+   "id": "city",
+   "type": "keyword"
+  },
+  {
+   "name": "station",
+   "id": "station",
+   "type": "keyword"
+  },
+  {
+   "name": "last_update",
+   "id": "last_update",
+   "type": "keyword"
+  },
+  {
+   "name": "latitude",
+   "id": "latitude",
+   "type": "keyword"
+  },
+  {
+   "name": "longitude",
+   "id": "longitude",
+   "type": "keyword"
+  },
+  {
+   "name": "pollutant_id",
+   "id": "pollutant_id",
+   "type": "keyword"
+  },
+  {
+   "name": "pollutant_min",
+   "id": "min_value",
+   "type": "keyword"
+  },
+  {
+   "name": "pollutant_max",
+   "id": "max_value",
+   "type": "keyword"
+  },
+  {
+   "name": "pollutant_avg",
+   "id": "avg_value",
+   "type": "keyword"
+  }
+ ],
+ "message": "Resource lists",
+ "version": "2.2.0",
+ "status": "ok",
+ "total": 28,
+ "count": 28,
+ "limit": "28",
+ "offset": "0",
+ "records": [
+  {
+   "country": "India",
+   "state": "Andhra Pradesh",
+   "city": "Nellore",
+   "station": "Ambedkar Nagar, Nellore - APPCB ",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "14.438164",
+   "longitude": "79.966814",
+   "pollutant_id": "CO",
+   "min_value": "31",
+   "max_value": "40",
+   "avg_value": "33"
+  },
+  {
+   "country": "India",
+   "state": "Andhra Pradesh",
+   "city": "Nellore",
+   "station": "Ambedkar Nagar, Nellore - APPCB ",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "14.438164",
+   "longitude": "79.966814",
+   "pollutant_id": "NH3",
+   "min_value": "6",
+   "max_value": "8",
+   "avg_value": "7"
+  },
+  {
+   "country": "India",
+   "state": "Andhra Pradesh",
+   "city": "Nellore",
+   "station": "Ambedkar Nagar, Nellore - APPCB ",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "14.438164",
+   "longitude": "79.966814",
+   "pollutant_id": "NO2",
+   "min_value": "20",
+   "max_value": "27",
+   "avg_value": "25"
+  },
+  {
+   "country": "India",
+   "state": "Andhra Pradesh",
+   "city": "Nellore",
+   "station": "Ambedkar Nagar, Nellore - APPCB ",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "14.438164",
+   "longitude": "79.966814",
+   "pollutant_id": "OZONE",
+   "min_value": "33",
+   "max_value": "44",
+   "avg_value": "41"
+  },
+  {
+   "country": "India",
+   "state": "Andhra Pradesh",
+   "city": "Nellore",
+   "station": "Ambedkar Nagar, Nellore - APPCB ",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "14.438164",
+   "longitude": "79.966814",
+   "pollutant_id": "PM10",
+   "min_value": "42",
+   "max_value": "58",
+   "avg_value": "47"
+  },
+  {
+   "country": "India",
+   "state": "Andhra Pradesh",
+   "city": "Nellore",
+   "station": "Ambedkar Nagar, Nellore - APPCB ",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "14.438164",
+   "longitude": "79.966814",
+   "pollutant_id": "PM2.5",
+   "min_value": "46",
+   "max_value": "64",
+   "avg_value": "52"
+  },
+  {
+   "country": "India",
+   "state": "Andhra Pradesh",
+   "city": "Nellore",
+   "station": "Ambedkar Nagar, Nellore - APPCB ",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "14.438164",
+   "longitude": "79.966814",
+   "pollutant_id": "SO2",
+   "min_value": "10",
+   "max_value": "19",
+   "avg_value": "13"
+  },
+  {
+   "country": "India",
+   "state": "Bihar",
+   "city": "Araria",
+   "station": "Kharahiya Basti, Araria - BSPCB",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "26.146529",
+   "longitude": "87.454184",
+   "pollutant_id": "CO",
+   "min_value": "23",
+   "max_value": "35",
+   "avg_value": "29"
+  },
+  {
+   "country": "India",
+   "state": "Bihar",
+   "city": "Araria",
+   "station": "Kharahiya Basti, Araria - BSPCB",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "26.146529",
+   "longitude": "87.454184",
+   "pollutant_id": "NH3",
+   "min_value": "4",
+   "max_value": "4",
+   "avg_value": "4"
+  },
+  {
+   "country": "India",
+   "state": "Bihar",
+   "city": "Araria",
+   "station": "Kharahiya Basti, Araria - BSPCB",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "26.146529",
+   "longitude": "87.454184",
+   "pollutant_id": "NO2",
+   "min_value": "9",
+   "max_value": "19",
+   "avg_value": "14"
+  },
+  {
+   "country": "India",
+   "state": "Bihar",
+   "city": "Araria",
+   "station": "Kharahiya Basti, Araria - BSPCB",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "26.146529",
+   "longitude": "87.454184",
+   "pollutant_id": "OZONE",
+   "min_value": "14",
+   "max_value": "15",
+   "avg_value": "14"
+  },
+  {
+   "country": "India",
+   "state": "Bihar",
+   "city": "Araria",
+   "station": "Kharahiya Basti, Araria - BSPCB",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "26.146529",
+   "longitude": "87.454184",
+   "pollutant_id": "PM10",
+   "min_value": "NA",
+   "max_value": "NA",
+   "avg_value": "NA"
+  },
+  {
+   "country": "India",
+   "state": "Bihar",
+   "city": "Araria",
+   "station": "Kharahiya Basti, Araria - BSPCB",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "26.146529",
+   "longitude": "87.454184",
+   "pollutant_id": "PM2.5",
+   "min_value": "NA",
+   "max_value": "NA",
+   "avg_value": "NA"
+  },
+  {
+   "country": "India",
+   "state": "Bihar",
+   "city": "Araria",
+   "station": "Kharahiya Basti, Araria - BSPCB",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "26.146529",
+   "longitude": "87.454184",
+   "pollutant_id": "SO2",
+   "min_value": "6",
+   "max_value": "22",
+   "avg_value": "14"
+  },
+  {
+   "country": "India",
+   "state": "Assam",
+   "city": "Nalbari",
+   "station": "Bata Chowk, Nalbari - PCBA",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "26.446912",
+   "longitude": "91.439057",
+   "pollutant_id": "CO",
+   "min_value": "20",
+   "max_value": "22",
+   "avg_value": "21"
+  },
+  {
+   "country": "India",
+   "state": "Assam",
+   "city": "Nalbari",
+   "station": "Bata Chowk, Nalbari - PCBA",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "26.446912",
+   "longitude": "91.439057",
+   "pollutant_id": "NH3",
+   "min_value": "6",
+   "max_value": "6",
+   "avg_value": "6"
+  },
+  {
+   "country": "India",
+   "state": "Assam",
+   "city": "Nalbari",
+   "station": "Bata Chowk, Nalbari - PCBA",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "26.446912",
+   "longitude": "91.439057",
+   "pollutant_id": "NO2",
+   "min_value": "13",
+   "max_value": "15",
+   "avg_value": "14"
+  },
+  {
+   "country": "India",
+   "state": "Assam",
+   "city": "Nalbari",
+   "station": "Bata Chowk, Nalbari - PCBA",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "26.446912",
+   "longitude": "91.439057",
+   "pollutant_id": "OZONE",
+   "min_value": "19",
+   "max_value": "19",
+   "avg_value": "19"
+  },
+  {
+   "country": "India",
+   "state": "Assam",
+   "city": "Nalbari",
+   "station": "Bata Chowk, Nalbari - PCBA",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "26.446912",
+   "longitude": "91.439057",
+   "pollutant_id": "PM10",
+   "min_value": "40",
+   "max_value": "133",
+   "avg_value": "70"
+  },
+  {
+   "country": "India",
+   "state": "Assam",
+   "city": "Nalbari",
+   "station": "Bata Chowk, Nalbari - PCBA",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "26.446912",
+   "longitude": "91.439057",
+   "pollutant_id": "PM2.5",
+   "min_value": "48",
+   "max_value": "259",
+   "avg_value": "90"
+  },
+  {
+   "country": "India",
+   "state": "Assam",
+   "city": "Nalbari",
+   "station": "Bata Chowk, Nalbari - PCBA",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "26.446912",
+   "longitude": "91.439057",
+   "pollutant_id": "SO2",
+   "min_value": "8",
+   "max_value": "8",
+   "avg_value": "8"
+  },
+  {
+   "country": "India",
+   "state": "Assam",
+   "city": "Silchar",
+   "station": "Tarapur, Silchar - PCBA",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "24.82827",
+   "longitude": "92.79525",
+   "pollutant_id": "CO",
+   "min_value": "26",
+   "max_value": "38",
+   "avg_value": "28"
+  },
+  {
+   "country": "India",
+   "state": "Assam",
+   "city": "Silchar",
+   "station": "Tarapur, Silchar - PCBA",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "24.82827",
+   "longitude": "92.79525",
+   "pollutant_id": "NH3",
+   "min_value": "1",
+   "max_value": "1",
+   "avg_value": "1"
+  },
+  {
+   "country": "India",
+   "state": "Assam",
+   "city": "Silchar",
+   "station": "Tarapur, Silchar - PCBA",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "24.82827",
+   "longitude": "92.79525",
+   "pollutant_id": "NO2",
+   "min_value": "20",
+   "max_value": "21",
+   "avg_value": "20"
+  },
+  {
+   "country": "India",
+   "state": "Assam",
+   "city": "Silchar",
+   "station": "Tarapur, Silchar - PCBA",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "24.82827",
+   "longitude": "92.79525",
+   "pollutant_id": "OZONE",
+   "min_value": "2",
+   "max_value": "3",
+   "avg_value": "3"
+  },
+  {
+   "country": "India",
+   "state": "Assam",
+   "city": "Silchar",
+   "station": "Tarapur, Silchar - PCBA",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "24.82827",
+   "longitude": "92.79525",
+   "pollutant_id": "PM10",
+   "min_value": "41",
+   "max_value": "50",
+   "avg_value": "44"
+  },
+  {
+   "country": "India",
+   "state": "Assam",
+   "city": "Silchar",
+   "station": "Tarapur, Silchar - PCBA",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "24.82827",
+   "longitude": "92.79525",
+   "pollutant_id": "PM2.5",
+   "min_value": "36",
+   "max_value": "42",
+   "avg_value": "38"
+  },
+  {
+   "country": "India",
+   "state": "Assam",
+   "city": "Silchar",
+   "station": "Tarapur, Silchar - PCBA",
+   "last_update": "22-11-2026 18:00:00",
+   "latitude": "24.82827",
+   "longitude": "92.79525",
+   "pollutant_id": "SO2",
+   "min_value": "6",
+   "max_value": "7",
+   "avg_value": "6"
+  }
+ ]
+}

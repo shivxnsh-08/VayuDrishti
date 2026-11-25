@@ -1,0 +1,84 @@
+# AQI configuration. Every number in this file must be VERIFIED against the current
+# CPCB National AQI standard before results are reported. Nothing here is hard-coded in Java.
+saanscheck:
+  aqi:
+    bands:
+      - { category: GOOD,         min: 0,   max: 50 }
+      - { category: SATISFACTORY, min: 51,  max: 100 }
+      - { category: MODERATE,     min: 101, max: 200 }
+      - { category: POOR,         min: 201, max: 300 }
+      - { category: VERY_POOR,    min: 301, max: 400 }
+      - { category: SEVERE,       min: 401, max: 500 }
+
+    # VERIFY: does the data.gov.in real-time feed publish per-pollutant SUB-INDICES (0-500)
+    # or raw concentrations? If raw concentrations, set to false and the breakpoints below are used.
+    values-are-sub-indices: true
+    max-plausible-sub-index: 500
+
+    # CPCB rule (VERIFY): overall AQI needs at least 3 pollutants, one of which is PM2.5 or PM10.
+    min-pollutants: 3
+    required-any-of: [PM25, PM10]
+
+    # Raw-concentration plausibility limits, used only when values-are-sub-indices=false.
+    # Units: ug/m3, except CO in mg/m3. VERIFY; values above these are rejected as INVALID.
+    max-plausible:
+      PM25: 1000
+      PM10: 2000
+      NO2: 2000
+      SO2: 2000
+      O3: 2000
+      CO: 100
+      NH3: 3000
+
+    # Concentration breakpoints -> sub-index (linear interpolation). VERIFY each row.
+    # The upper limit of the last band is an extrapolation choice; document it.
+    breakpoints:
+      PM25:
+        - { c-low: 0,   c-high: 30,  i-low: 0,   i-high: 50 }
+        - { c-low: 31,  c-high: 60,  i-low: 51,  i-high: 100 }
+        - { c-low: 61,  c-high: 90,  i-low: 101, i-high: 200 }
+        - { c-low: 91,  c-high: 120, i-low: 201, i-high: 300 }
+        - { c-low: 121, c-high: 250, i-low: 301, i-high: 400 }
+        - { c-low: 251, c-high: 380, i-low: 401, i-high: 500 }
+      PM10:
+        - { c-low: 0,   c-high: 50,  i-low: 0,   i-high: 50 }
+        - { c-low: 51,  c-high: 100, i-low: 51,  i-high: 100 }
+        - { c-low: 101, c-high: 250, i-low: 101, i-high: 200 }
+        - { c-low: 251, c-high: 350, i-low: 201, i-high: 300 }
+        - { c-low: 351, c-high: 430, i-low: 301, i-high: 400 }
+        - { c-low: 431, c-high: 510, i-low: 401, i-high: 500 }
+      NO2:
+        - { c-low: 0,   c-high: 40,  i-low: 0,   i-high: 50 }
+        - { c-low: 41,  c-high: 80,  i-low: 51,  i-high: 100 }
+        - { c-low: 81,  c-high: 180, i-low: 101, i-high: 200 }
+        - { c-low: 181, c-high: 280, i-low: 201, i-high: 300 }
+        - { c-low: 281, c-high: 400, i-low: 301, i-high: 400 }
+        - { c-low: 401, c-high: 520, i-low: 401, i-high: 500 }
+      O3:
+        - { c-low: 0,   c-high: 50,  i-low: 0,   i-high: 50 }
+        - { c-low: 51,  c-high: 100, i-low: 51,  i-high: 100 }
+        - { c-low: 101, c-high: 168, i-low: 101, i-high: 200 }
+        - { c-low: 169, c-high: 208, i-low: 201, i-high: 300 }
+        - { c-low: 209, c-high: 748, i-low: 301, i-high: 400 }
+        - { c-low: 749, c-high: 1000, i-low: 401, i-high: 500 }
+      CO:
+        - { c-low: 0,    c-high: 1.0, i-low: 0,   i-high: 50 }
+        - { c-low: 1.1,  c-high: 2.0, i-low: 51,  i-high: 100 }
+        - { c-low: 2.1,  c-high: 10,  i-low: 101, i-high: 200 }
+        - { c-low: 10.1, c-high: 17,  i-low: 201, i-high: 300 }
+        - { c-low: 17.1, c-high: 34,  i-low: 301, i-high: 400 }
+        - { c-low: 34.1, c-high: 50,  i-low: 401, i-high: 500 }
+      SO2:
+        - { c-low: 0,    c-high: 40,   i-low: 0,   i-high: 50 }
+        - { c-low: 41,   c-high: 80,   i-low: 51,  i-high: 100 }
+        - { c-low: 81,   c-high: 380,  i-low: 101, i-high: 200 }
+        - { c-low: 381,  c-high: 800,  i-low: 201, i-high: 300 }
+        - { c-low: 801,  c-high: 1600, i-low: 301, i-high: 400 }
+        - { c-low: 1601, c-high: 2100, i-low: 401, i-high: 500 }
+      NH3:
+        - { c-low: 0,    c-high: 200,  i-low: 0,   i-high: 50 }
+        - { c-low: 201,  c-high: 400,  i-low: 51,  i-high: 100 }
+        - { c-low: 401,  c-high: 800,  i-low: 101, i-high: 200 }
+        - { c-low: 801,  c-high: 1200, i-low: 201, i-high: 300 }
+        - { c-low: 1201, c-high: 1800, i-low: 301, i-high: 400 }
+        - { c-low: 1801, c-high: 2400, i-low: 401, i-high: 500 }

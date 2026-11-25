@@ -1,0 +1,244 @@
+spring:
+  application:
+    name: saanscheck-backend
+  config:
+    # AQI bands, breakpoints and plausibility limits live in their own file (spec: config, not code).
+    import: classpath:aqi.yml
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/saanscheck}
+    username: ${DB_USER:saanscheck}
+    password: ${DB_PASSWORD:saanscheck}
+    hikari:
+      connection-timeout: 3000   # fail fast when the database is down
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate          # Flyway owns the schema
+  flyway:
+    enabled: true
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 500ms              # short, so a dead Redis degrades to "slow" instead of "hung"
+      connect-timeout: 500ms
+  threads:
+    virtual:
+      enabled: true
+  task:
+    scheduling:
+      # Several scheduled jobs (ingestion, alerts, Telegram polling, forecasts, health monitor):
+      # a slow ingestion run must not delay the others.
+      pool:
+        size: 4
+      # On stop/restart, let an in-flight ingestion run (~10 s) finish instead of cutting it off.
+      # (A run killed anyway is marked INTERRUPTED at the next start.) Needs docker stop_grace_period > 30s.
+      shutdown:
+        await-termination: true
+        await-termination-period: 30s
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+
+server:
+  port: 8080
+  shutdown: graceful            # finish in-flight HTTP requests on SIGTERM
+  error:
+    include-message: always
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      # Component details (DB, disk) only for ADMIN; anonymous callers see UP/DOWN only.
+      show-details: when-authorized
+      roles: ADMIN
+  health:
+    # Redis is an optional cache; its outage must not mark the whole service DOWN (spec section 10).
+    redis:
+      enabled: false
+  metrics:
+    distribution:
+      percentiles-histogram:
+        saanscheck.api.latency: true
+        saanscheck.forecast.latency: true
+
+saanscheck:
+  scheduling:
+    enabled: ${SCHEDULING_ENABLED:true}
+
+  cache:
+    enabled: ${CACHE_ENABLED:true}       # toggle for the X7 latency experiment
+    nearest-ttl: PT1H
+    latest-aqi-ttl: PT5M
+
+  # Dedicated administrator (same login as everyone; sees only the admin interface). See docs/operations.md.
+  admin:
+    email: ${ADMIN_EMAIL:}
+    password: ${ADMIN_PASSWORD:}
+    required: ${ADMIN_REQUIRED:false}          # true in production: missing/weak admin config stops start-up
+    password-reset: ${ADMIN_PASSWORD_RESET:false}   # one-off rotation to ADMIN_PASSWORD; remove afterwards
+  security:
+    admin-emails: ${ADMIN_EMAILS:}
+    public-api-docs: ${API_DOCS_PUBLIC:true}   # false: Swagger UI / OpenAPI only for ADMIN
+    login:
+      max-failures: 5
+      window: PT15M
+    jwt:
+      secret: ${JWT_SECRET:}             # >= 32 bytes; required
+      ttl: PT12H
+      issuer: saanscheck
+
+  ingestion:
+    enabled: ${INGESTION_ENABLED:true}
+    base-url: ${DATA_GOV_BASE_URL:https://api.data.gov.in}
+    # VERIFY: resource id of "Real time Air Quality Index from various locations" on data.gov.in
+    resource-id: ${DATA_GOV_RESOURCE_ID:3b01bcb8-0b14-4abf-b6f2-c1bfd384ba69}
+    api-key: ${DATA_GOV_API_KEY:}
+    # The feed keeps only the latest hour and publishes a few minutes after the hour (observed :02).
+    # Polling every 15 min means a late publication cannot overwrite an hour before we capture it;
+    # re-reading an unchanged snapshot is a no-op (deduplicated by primary key).
+    cron: "0 5/15 * * * *"
+    page-size: 500                       # VERIFY max page size / rate limits
+    max-pages: 50
+    page-delay: 300ms
+    connect-timeout: 5s
+    read-timeout: 30s
+    # Start with one state (spec risk table). Passed as filters[state]=... VERIFY filter syntax.
+    filters:
+      state: ${INGESTION_STATE_FILTER:}
+    source-zone: Asia/Kolkata
+    timestamp-pattern: "dd-MM-yyyy HH:mm:ss"   # VERIFY against a real payload
+    stuck-hours: 6
+    # Feed values are sub-indices of 24-hour averages: small integers (e.g. NH3 = 5) legitimately stay
+    # identical for many hours. Constant values at or below this sub-index are not flagged as STUCK.
+    stuck-min-value: 50
+    retry:
+      max-attempts: 4            # per page request, including the first try
+      backoff: 2s                # doubled per attempt ...
+      max-backoff: 30s           # ... up to this
+      max-retry-after: 60s       # longest Retry-After (HTTP 429/503) that is honoured
+    health:
+      # Newest observation older than this -> DEGRADED (source delayed). Measured 2026-11-24: an hour stamped HH:30 UTC
+      # first appears 35-50 min later, and runs are 15 min apart, so a healthy feed peaks at ~125 min just before
+      # the next hour arrives (100 min made health flap to DEGRADED every hour). Stale stays at 3 h.
+      delayed-after: PT135M
+      overdue-after: PT35M       # no ingestion run for this long -> DEGRADED (scheduler overdue)
+      failure-threshold: 3       # consecutive failed runs -> FAILED
+      source-failure-threshold: 2  # consecutive source-side failures -> SOURCE_UNAVAILABLE
+      min-fresh-share: 0.5       # fewer fresh stations than this share -> DEGRADED
+      notify-after: PT10M        # a problem status must persist this long before an alert is sent
+      startup-catch-up-after: PT10M  # at startup, run immediately if the last successful run is older
+      startup-delay: PT20S           # ... about this long after the application is ready
+    # VERIFY every field name against a real payload; only this mapping should change if the API changes.
+    fields:
+      station: station
+      city: city
+      state: state
+      latitude: latitude
+      longitude: longitude
+      pollutant: pollutant_id
+      value: avg_value
+      last-update: last_update
+    # Source pollutant id -> internal code. Brackets keep the dot in "PM2.5" as part of the key.
+    pollutant-aliases:
+      OZONE: O3
+      "[PM2.5]": PM25
+      PM10: PM10
+      NO2: NO2
+      SO2: SO2
+      CO: CO
+      NH3: NH3
+
+  forecast:
+    base-url: ${FORECAST_SERVICE_URL:http://localhost:8000}
+    connect-timeout: 1s
+    read-timeout: 3s
+    history-hours: 168
+    min-history-points: 24
+    max-data-age: PT3H                  # newest observation older than this -> STALE_DATA, no forecast call
+    fresh-for: PT90M
+    refresh-cron: "0 25 * * * *"
+
+  briefing:
+    enabled: ${BRIEFING_ENABLED:true}
+    catch-up-window: PT3H        # deliver a missed briefing up to 3 h late (restart/downtime), then skip the day
+    app-url: ${APP_URL:http://localhost:5173}   # dashboard link in the message
+
+  advice:
+    base-url: ${FORECAST_SERVICE_URL:http://localhost:8000}
+    connect-timeout: 1s
+    read-timeout: 8s
+
+  telegram:
+    bot-token: ${TELEGRAM_BOT_TOKEN:}
+    bot-username: ${TELEGRAM_BOT_USERNAME:}
+    base-url: https://api.telegram.org
+    poll-updates: true
+    link-code-ttl: PT15M
+    connect-timeout: 3s
+    read-timeout: 10s
+
+  alerts:
+    enabled: true
+    zone: Asia/Kolkata
+    # Change-based alerts react to new observations. Ingestion stores a new hour at :05/:20/:35/:50; evaluating
+    # every 2 min means a new reading is acted on within ~2 min of being stored (was 10 min). Cheap: one indexed
+    # lookup per alertable user.
+    evaluation-interval: PT2M
+    events:
+      significant-change: 25            # AQI points vs. what the user was last told
+      reminder-interval: PT8H           # minimum time between "still above your level" reminders
+      critical-category: SEVERE         # critical alerts may bypass quiet hours ...
+      critical-bypasses-quiet-hours: true   # ... only for users who opted in (profile: "Send Severe alerts ...")
+    dispatch-interval: PT30S
+    horizon-hours: 24
+    window-hours: 6
+    cooldown: PT6H
+    stale-after: PT3H
+    max-attempts: 5
+    base-backoff: PT1M
+    sending-timeout: PT5M
+    trend-delta: 25
+    # VERIFY with public health guidance. Conservative: sensitive groups are alerted earlier.
+    default-min-category:
+      GENERAL: POOR
+      ASTHMA: MODERATE
+      CHILD: MODERATE
+      ELDERLY: MODERATE
+      EXERCISER: MODERATE
+
+  profile:
+    coordinate-decimals: 2               # ~1.1 km; coarse location only (privacy)
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      forecast:
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 2
+      advice:
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 2
+  retry:
+    instances:
+      forecast:
+        max-attempts: 2
+        wait-duration: 300ms
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+        retry-exceptions:
+          - org.springframework.web.client.ResourceAccessException
+          - org.springframework.web.client.HttpServerErrorException
+
+logging:
+  level:
+    com.saanscheck: INFO

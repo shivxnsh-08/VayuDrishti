@@ -1,0 +1,5 @@
+{
+  "message": "Air may reach 320 around 07:00. Avoid outdoor exercise and keep windows closed.\nGeneral guidance only, not medical advice.",
+  "action_codes": ["AVOID_OUTDOOR_EXERCISE", "KEEP_WINDOWS_CLOSED"],
+  "source": "LLM"
+}
