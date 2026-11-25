@@ -36,10 +36,6 @@ public final class TelegramHtml {
         return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;");
     }
 
-    public static String bold(String text) {
-        return "<b>" + esc(text) + "</b>";
-    }
-
     public static String link(String url, String label) {
         return "<a href=\"" + esc(url) + "\">" + esc(label) + "</a>";
     }

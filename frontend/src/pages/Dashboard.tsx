@@ -125,9 +125,9 @@ function IngestionCard({ health, error, loading }: { health: IngestionHealth | n
         <PipelineFact label="Newest observation" value={formatTime(health.latestObservationAt)}
           hint={health.latestObservationAt ? formatAge(health.latestObservationAt) : 'none stored'} />
         <PipelineFact label="Last run" value={health.lastRunStatus ?? '-'}
-          hint={health.lastRunAt ? `${formatAge(health.lastRunAt)}${health.lastRunTrigger ? ` · ${health.lastRunTrigger.toLowerCase()}` : ''}` : 'never'} />
+          hint={health.lastRunAt ? `${formatAge(health.lastRunAt)}${health.lastRunTrigger ? ` Â· ${health.lastRunTrigger.toLowerCase()}` : ''}` : 'never'} />
         <PipelineFact label="Stations fresh / stale" value={`${health.stationsFresh} / ${health.stationsStale}`}
-          hint={`of ${health.stationsActive} active · fresh = within ${staleHours} h`} />
+          hint={`of ${health.stationsActive} active Â· fresh = within ${staleHours} h`} />
       </div>
       {health.reasons.length > 0 && health.status !== 'HEALTHY' && (
         <ul className="mt-3 list-disc space-y-0.5 pl-5 text-sm text-slate-300">

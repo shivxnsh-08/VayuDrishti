@@ -181,12 +181,6 @@ public class AlertRepository {
                 AlertRepository::mapView);
     }
 
-    public long countByDedupeKeyPrefix(String prefix) {
-        Long n = jdbc.queryForObject("SELECT count(*) FROM alerts WHERE dedupe_key LIKE :p",
-                new MapSqlParameterSource("p", prefix + "%"), Long.class);
-        return n == null ? 0 : n;
-    }
-
     private static AlertView mapView(ResultSet rs, int i) throws SQLException {
         return new AlertView(rs.getLong("id"), rs.getString("station_id"), rs.getString("kind"),
                 rs.getString("category"), (Integer) rs.getObject("peak_aqi"), ts(rs, "window_start"),

@@ -7,17 +7,6 @@ export interface Coords {
   lon: number;
 }
 
-/** Current permission state, WITHOUT prompting the user. */
-export async function locationPermission(): Promise<LocationPermission> {
-  if (typeof navigator === 'undefined' || !navigator.geolocation) return 'unsupported';
-  try {
-    const status = await navigator.permissions?.query({ name: 'geolocation' as PermissionName });
-    return status ? (status.state as LocationPermission) : 'prompt';
-  } catch {
-    return 'prompt';   // Permissions API not available: we only know after asking
-  }
-}
-
 export class LocationError extends Error {
   constructor(public kind: 'denied' | 'unavailable' | 'timeout', message: string) {
     super(message);

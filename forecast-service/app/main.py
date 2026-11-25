@@ -63,7 +63,6 @@ def create_app(settings: Settings | None = None, phraser: Phraser | None = None,
     app = FastAPI(title="VayuDrishti forecast & advice service", version="0.1.0", lifespan=lifespan)
     app.state.store = store
     app.state.lifecycle = lifecycle
-    app.state.prediction_stats = stats
 
     @app.get("/health")
     def health() -> dict:

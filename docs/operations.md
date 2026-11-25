@@ -49,7 +49,7 @@ cd frontend && npm test && npm run build
 docker run --rm -v "E:/VayuDrishti:/repo:ro" --entrypoint sh saans_check-forecast-service -c \
   'mkdir -p /tmp/r/backend/src/main && cp -r /repo/forecast-service /repo/contracts /tmp/r/ && \
    cp -r /repo/backend/src/main/resources /tmp/r/backend/src/main/ && cd /tmp/r/forecast-service && \
-   pip install -q pytest==8.3.4 matplotlib==3.10.0 tabulate==0.9.0 && python -m pytest -q'
+   pip install -q pytest==8.3.4 tabulate==0.9.0 && python -m pytest -q'
 ```
 
 The three `test_repository_pg.py` tests need `PGTEST_DSN` pointing at a **throwaway** PostGIS. They drop the

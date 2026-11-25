@@ -34,19 +34,8 @@ public class ReadingRepository {
         return n == 1;
     }
 
-    /** Most-recent-first values (OK or STUCK) strictly before {@code before}, for stuck detection. */
-    public List<Double> recentValues(String stationId, String pollutant, Instant before, int limit) {
-        return jdbc.queryForList("""
-                SELECT value FROM readings
-                WHERE station_id = :sid AND pollutant = :pol AND ts < :before
-                  AND value IS NOT NULL AND quality IN ('OK', 'STUCK')
-                ORDER BY ts DESC LIMIT :limit
-                """, new MapSqlParameterSource().addValue("sid", stationId).addValue("pol", pollutant)
-                .addValue("before", Timestamp.from(before)).addValue("limit", limit), Double.class);
-    }
-
     /**
-     * Like {@link #recentValues} but only readings with {@code since <= ts < before}. Used for stuck-sensor
+     * Most-recent-first values (OK or STUCK) with {@code since <= ts < before}. Used for stuck-sensor
      * detection so that readings from before an outage (a time gap) never count as "the same value for N hours".
      */
     public List<Double> recentValuesSince(String stationId, String pollutant, Instant since, Instant before, int limit) {
